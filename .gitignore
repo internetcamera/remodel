@@ -1,0 +1,9 @@
+node_modules
+
+cache
+artifacts
+typechain
+
+dist
+.DS_Store
+.env*
