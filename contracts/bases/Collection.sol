@@ -24,11 +24,13 @@ contract InternetCameraCollection is
 
     function initialize(
         address film,
+        address creator,
         string memory name,
         string memory symbol
     ) public initializer {
         __ERC721_init(name, symbol);
         __Ownable_init_unchained();
+        transferOwnership(creator);
         filmAddress = film;
     }
 
@@ -43,7 +45,7 @@ contract InternetCameraCollection is
         emit PostCreated(tokenId, ipfsHash);
     }
 
-    function deleteImage(uint256 tokenId) public onlyOwner {
+    function remove(uint256 tokenId) public onlyOwner {
         _burn(tokenId);
         delete data[tokenId];
         emit PostRemoved(tokenId);

@@ -6,7 +6,10 @@ import {IInternetCameraFilm} from "./interfaces/IFilm.sol";
 import {IInternetCameraCollection} from "./interfaces/ICollection.sol";
 import {IInternetCameraRegistry} from "./interfaces/IRegistry.sol";
 
-contract InternetCameraKitDeployer {
+contract InternetCameraKit {
+    address public film;
+    address public collection;
+
     constructor(
         string memory name,
         string memory symbol,
@@ -15,9 +18,8 @@ contract InternetCameraKitDeployer {
         address collectionImplementation,
         address registry
     ) {
-        address film = Clones.clone(filmImplementation);
-        address collection = Clones.clone(collectionImplementation);
-
+        film = Clones.clone(filmImplementation);
+        collection = Clones.clone(collectionImplementation);
         IInternetCameraFilm(film).initialize(
             name,
             symbol,
@@ -25,7 +27,12 @@ contract InternetCameraKitDeployer {
             collection,
             filmConfig
         );
-        IInternetCameraCollection(collection).initialize(film, name, symbol);
+        IInternetCameraCollection(collection).initialize(
+            film,
+            msg.sender,
+            name,
+            symbol
+        );
         IInternetCameraRegistry(registry).register(film, collection);
     }
 }

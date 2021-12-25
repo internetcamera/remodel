@@ -4,8 +4,8 @@ import chaiAsPromised from 'chai-as-promised';
 import { expect } from 'chai';
 import {
   InternetCameraCollection,
-  InternetCameraKitDeployer,
-  InternetCameraKitDeployer__factory,
+  InternetCameraKit,
+  InternetCameraKit__factory,
   InternetCameraFilmERC20,
   InternetCameraRegistry,
   InternetCameraFilmERC20__factory,
@@ -67,10 +67,10 @@ describe('Internet Camera', function () {
 
   it('should allow a custom kit deploy with erc20 film', async function () {
     // Deploy like a user would
-    const InternetCameraKitDeployer = (await ethers.getContractFactory(
-      'InternetCameraKitDeployer'
-    )) as InternetCameraKitDeployer__factory;
-    const contract = (await InternetCameraKitDeployer.deploy(
+    const InternetCameraKit = (await ethers.getContractFactory(
+      'InternetCameraKit'
+    )) as InternetCameraKit__factory;
+    const contract = (await InternetCameraKit.deploy(
       'Test',
       'TEST',
       filmERC20Implementation.address,
@@ -84,16 +84,15 @@ describe('Internet Camera', function () {
       },
       collectionImplementation.address,
       registry.address
-    )) as InternetCameraKitDeployer;
+    )) as InternetCameraKit;
     const tx = await (await contract.deployed()).deployTransaction.wait();
     const deployed = tx.logs.filter(l => l.data == '0x');
-    await expect(deployed.length).to.equal(2);
     const film = InternetCameraFilmERC20__factory.connect(
-      deployed[0].address,
+      deployed[1].address,
       accounts[0]
     );
     const collection = InternetCameraCollection__factory.connect(
-      deployed[1].address,
+      deployed[2].address,
       accounts[0]
     );
 
@@ -130,10 +129,10 @@ describe('Internet Camera', function () {
 
   it('should allow a custom kit deploy with erc721 film', async function () {
     // Deploy like a user would
-    const InternetCameraKitDeployer = (await ethers.getContractFactory(
-      'InternetCameraKitDeployer'
-    )) as InternetCameraKitDeployer__factory;
-    const contract = (await InternetCameraKitDeployer.deploy(
+    const InternetCameraKit = (await ethers.getContractFactory(
+      'InternetCameraKit'
+    )) as InternetCameraKit__factory;
+    const contract = (await InternetCameraKit.deploy(
       'Test',
       'TEST',
       filmERC721Implementation.address,
@@ -147,16 +146,16 @@ describe('Internet Camera', function () {
       },
       collectionImplementation.address,
       registry.address
-    )) as InternetCameraKitDeployer;
+    )) as InternetCameraKit;
     const tx = await (await contract.deployed()).deployTransaction.wait();
     const deployed = tx.logs.filter(l => l.data == '0x');
-    await expect(deployed.length).to.equal(3);
+
     const film = InternetCameraFilmERC721__factory.connect(
-      deployed[1].address,
+      deployed[2].address,
       accounts[0]
     );
     const collection = InternetCameraCollection__factory.connect(
-      deployed[2].address,
+      deployed[3].address,
       accounts[0]
     );
 

@@ -10,11 +10,12 @@
     "typechain": "rm -rf ./typechain && typechain --show-stack-traces --target ethers-v5 --out-dir ./typechain 'artifacts/!(build-info)/**/!(*.dbg*)*.json'",
     "build:contracts": "yarn compile && yarn typechain",
     "build:package": "rm -rf ./dist && tsc && cp -R addresses dist && cp -R artifacts/contracts dist/artifacts && cp -R contracts dist",
-    "deploy": "ts-node scripts/deploy.ts --chainId 5 && cp -R addresses dist"
+    "deploy": "ts-node scripts/deploy.ts --chainId 4 && cp -R addresses dist"
   },
   "devDependencies": {
     "@divergencetech/ethier": "^0.10.0",
     "@nomiclabs/hardhat-ethers": "^2.0.0",
+    "@nomiclabs/hardhat-etherscan": "^2.1.8",
     "@nomiclabs/hardhat-waffle": "^2.0.0",
     "@openzeppelin/contracts": "^4.4.1",
     "@openzeppelin/contracts-upgradeable": "^4.4.1",
@@ -34,6 +35,7 @@
     "ethers": "^5.5.2",
     "fs-extra": "^10.0.0",
     "hardhat": "^2.8.0",
+    "hardhat-change-network": "^0.0.7",
     "hardhat-deploy": "^0.9.14",
     "hardhat-deploy-ethers": "^0.3.0-beta.11",
     "hardhat-gas-reporter": "^1.0.6",

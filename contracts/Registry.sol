@@ -10,7 +10,7 @@ contract InternetCameraRegistry is
     Initializable,
     OwnableUpgradeable
 {
-    mapping(bytes32 => bool) public delisted;
+    mapping(bytes32 => bool) private _delisted;
 
     event DeploymentRegistered(
         address indexed creator,
@@ -27,7 +27,8 @@ contract InternetCameraRegistry is
     }
 
     function register(address film, address collection) public {
-        if (delisted[getDeploymentId(film, collection)]) revert NotAuthorized();
+        if (_delisted[getDeploymentId(film, collection)])
+            revert NotAuthorized();
 
         // TODO: Check ERC165 interface on film and collection
         emit DeploymentRegistered(
@@ -39,7 +40,7 @@ contract InternetCameraRegistry is
     }
 
     function getDeploymentId(address film, address collection)
-        public
+        private
         pure
         returns (bytes32)
     {
@@ -48,7 +49,7 @@ contract InternetCameraRegistry is
 
     // Admin functions
     function delist(address film, address collection) public onlyOwner {
-        delisted[getDeploymentId(film, collection)] = true;
+        _delisted[getDeploymentId(film, collection)] = true;
         emit DeploymentDelisted(film, collection);
     }
 }

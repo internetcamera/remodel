@@ -6,6 +6,8 @@ import { HardhatUserConfig } from 'hardhat/types';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import 'hardhat-gas-reporter';
+import 'hardhat-change-network';
+import '@nomiclabs/hardhat-etherscan';
 import '@openzeppelin/hardhat-upgrades';
 
 task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
@@ -25,6 +27,14 @@ const config: HardhatUserConfig = {
       accounts: {
         count: 100
       }
+    },
+    rinkeby: {
+      chainId: 4,
+      url: require('dotenv').config({ path: '.env.4' }).parsed.RPC_ENDPOINT
+    },
+    goerli: {
+      chainId: 5,
+      url: require('dotenv').config({ path: '.env.5' }).parsed.RPC_ENDPOINT
     }
   },
   namedAccounts: {
@@ -34,7 +44,10 @@ const config: HardhatUserConfig = {
     outDir: 'typechain',
     target: 'ethers-v5'
   },
-  gasReporter: {}
+  etherscan: {
+    apiKey: require('dotenv').config({ path: '.env.4' }).parsed
+      .ETHERSCAN_API_KEY as string
+  }
 };
 
 export default config;

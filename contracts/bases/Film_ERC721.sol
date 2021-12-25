@@ -31,6 +31,7 @@ contract InternetCameraFilmERC721 is
         __ERC721_init(name, symbol);
         __Ownable_init_unchained();
         __InternetCameraFilm_init(collection, config);
+        transferOwnership(creator);
 
         for (uint256 i = 0; i < config.premint; i++) {
             _mint(creator, "");

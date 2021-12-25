@@ -9,6 +9,7 @@ interface IInternetCameraCollection {
 
     function initialize(
         address film,
+        address creator,
         string memory name,
         string memory symbol
     ) external;

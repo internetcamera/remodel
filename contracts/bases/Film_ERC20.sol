@@ -28,6 +28,7 @@ contract InternetCameraFilmERC20 is
         __ERC20_init(name, symbol);
         __Ownable_init_unchained();
         __InternetCameraFilm_init(collection, config);
+        transferOwnership(creator);
 
         if (config.premint > 0) _mint(creator, config.premint * 10**decimals());
     }
@@ -35,8 +36,11 @@ contract InternetCameraFilmERC20 is
     function mint(uint256 amount) public payable {
         if (!config.mintable) revert NotAuthorized();
         if (msg.value != config.price * amount) revert NotAuthorized();
-        if (totalSupply() + amount > config.maxSupply) revert NotAuthorized();
-        _mint(_msgSender(), amount);
+        if (
+            totalSupply() + (amount * 10**decimals()) >
+            (config.maxSupply * 10**decimals())
+        ) revert NotAuthorized();
+        _mint(_msgSender(), amount * 10**decimals());
     }
 
     function use(string memory ipfsHash) public {
