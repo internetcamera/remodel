@@ -5,7 +5,7 @@ interface IInternetCameraCollection {
     event PostCreated(uint256 indexed tokenId, string ipfsHash);
     event PostRemoved(uint256 indexed tokenId);
 
-    error NotAuthorized();
+    error CollectionNotAuthorized();
 
     function initialize(
         address film,
