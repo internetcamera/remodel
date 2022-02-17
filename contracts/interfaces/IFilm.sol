@@ -12,6 +12,7 @@ interface IInternetCameraFilm {
     }
 
     error NotAuthorized();
+    error WithdrawFailed();
 
     function initialize(
         string memory name,

@@ -2,14 +2,12 @@
 pragma solidity ^0.8.2;
 
 import {InternetCameraFilm} from "./Film.sol";
-import {OwnableUpgradeable} from "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import {ERC20BurnableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import {IInternetCameraCollection} from "../interfaces/ICollection.sol";
 
 contract InternetCameraFilmERC20 is
     InternetCameraFilm,
-    OwnableUpgradeable,
     ERC20Upgradeable,
     ERC20BurnableUpgradeable
 {
@@ -23,13 +21,8 @@ contract InternetCameraFilmERC20 is
         address collection,
         InternetCameraFilm.Configuration memory config
     ) public initializer {
-        if (config.premint > config.maxSupply) revert NotAuthorized();
-
         __ERC20_init(name, symbol);
-        __Ownable_init_unchained();
-        __InternetCameraFilm_init(collection, config);
-        transferOwnership(creator);
-
+        InternetCameraFilm.initialize(collection, config);
         if (config.premint > 0) _mint(creator, config.premint * 10**decimals());
     }
 
@@ -43,7 +36,7 @@ contract InternetCameraFilmERC20 is
         _mint(_msgSender(), amount * 10**decimals());
     }
 
-    function use(string memory ipfsHash) public {
+    function use(string memory ipfsHash) public checkUsable {
         _burn(_msgSender(), 1 * 10**decimals());
         uint256 tokenId = IInternetCameraCollection(collection).totalSupply() +
             1;
