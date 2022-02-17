@@ -9,7 +9,7 @@ abstract contract InternetCameraFilm is IInternetCameraFilm, Initializable {
     IInternetCameraFilm.Configuration public config;
 
     modifier onlyCollectionContract() {
-        if (msg.sender != address(collection)) revert NotAuthorized();
+        if (msg.sender != address(collection)) revert FilmNotAuthorized();
         _;
     }
 
