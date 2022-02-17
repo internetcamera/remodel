@@ -11,8 +11,8 @@ interface IInternetCameraFilm {
         uint256 endTime;
     }
 
-    error NotAuthorized();
     error WithdrawFailed();
+    error FilmNotAuthorized();
 
     function initialize(
         string memory name,

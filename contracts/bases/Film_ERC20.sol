@@ -21,18 +21,19 @@ contract InternetCameraFilmERC20 is
         address collection,
         InternetCameraFilm.Configuration memory config
     ) public initializer {
+        if (config.premint > config.maxSupply) revert FilmNotAuthorized();
         __ERC20_init(name, symbol);
         InternetCameraFilm.initialize(collection, config);
         if (config.premint > 0) _mint(creator, config.premint * 10**decimals());
     }
 
     function mint(uint256 amount) public payable {
-        if (!config.mintable) revert NotAuthorized();
-        if (msg.value != config.price * amount) revert NotAuthorized();
+        if (!config.mintable) revert FilmNotAuthorized();
+        if (msg.value != config.price * amount) revert FilmNotAuthorized();
         if (
             totalSupply() + (amount * 10**decimals()) >
             (config.maxSupply * 10**decimals())
-        ) revert NotAuthorized();
+        ) revert FilmNotAuthorized();
         _mint(_msgSender(), amount * 10**decimals());
     }
 

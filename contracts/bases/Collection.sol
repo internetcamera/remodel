@@ -15,7 +15,7 @@ contract InternetCameraCollection is
     mapping(uint256 => string) private data;
 
     modifier onlyFilmContract() {
-        if (msg.sender != filmAddress) revert NotAuthorized();
+        if (msg.sender != filmAddress) revert CollectionNotAuthorized();
         _;
     }
 

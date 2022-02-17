@@ -24,6 +24,7 @@ contract InternetCameraFilmERC721 is
         address collection,
         InternetCameraFilm.Configuration memory config
     ) public initializer {
+        if (config.premint > config.maxSupply) revert FilmNotAuthorized();
         __ERC721_init(name, symbol);
         InternetCameraFilm.initialize(collection, config);
         for (uint256 i = 0; i < config.premint; i++) {
@@ -36,9 +37,9 @@ contract InternetCameraFilmERC721 is
     }
 
     function mint(string memory ipfsHash) public payable {
-        if (!config.mintable) revert NotAuthorized();
-        if (msg.value != config.price) revert NotAuthorized();
-        if (_counter >= config.maxSupply) revert NotAuthorized();
+        if (!config.mintable) revert FilmNotAuthorized();
+        if (msg.value != config.price) revert FilmNotAuthorized();
+        if (_counter >= config.maxSupply) revert FilmNotAuthorized();
         _mint(_msgSender(), ipfsHash);
     }
 
@@ -49,7 +50,7 @@ contract InternetCameraFilmERC721 is
     }
 
     function use(uint256 tokenId, string memory ipfsHash) public checkUsable {
-        if (ownerOf(tokenId) != _msgSender()) revert NotAuthorized();
+        if (ownerOf(tokenId) != _msgSender()) revert FilmNotAuthorized();
         _burn(tokenId);
         IInternetCameraCollection(collection).post(
             _msgSender(),
